@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichajes</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px;
+    font-size: 14px;
+}
+
+h2 {
+    font-size: 0.7rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    margin-top: 24px;
+}
+h2:first-child { margin-top: 0; }
+
+/* ── Tabla resumen ── */
+.summary {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4px;
+}
+.summary th {
+    background: #1e293b;
+    padding: 7px 12px;
+    text-align: left;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: normal;
+}
+.summary td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #1e293b;
+}
+.summary tr:last-child td { border-bottom: none; }
+.summary .total td {
+    border-top: 2px solid #334155;
+    background: #1e293b;
+    font-weight: bold;
+}
+.summary td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.summary th:not(:first-child) { text-align: right; }
+
+/* ── Tabla días ── */
+.scroll { overflow-x: auto; }
+
+.days {
+    border-collapse: collapse;
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+.days th {
+    background: #1e293b;
+    padding: 5px 5px;
+    color: #64748b;
+    font-weight: normal;
+    text-align: center;
+}
+.days td {
+    padding: 4px 5px;
+    text-align: center;
+    border: 1px solid #1a2540;
+    min-width: 36px;
+}
+.days .mes {
+    text-align: left;
+    font-weight: bold;
+    position: sticky;
+    left: 0;
+    background: #0f172a;
+    z-index: 1;
+    padding-right: 10px;
+    min-width: 52px;
+}
+.days .sep { border-left: 2px solid #334155; }
+
+/* colores celdas */
+.wk   { background: #1a2540; }
+.emp  { color: #2d3f5a; }
+.ok   { color: #86efac; }
+.low  { color: #fde68a; }
+.min  { color: #fca5a5; }
+.ttot { font-weight: bold; background: #1a2540; }
+
+/* colores diff */
+.pos  { color: #22c55e; }
+.neg  { color: #ef4444; }
+.dim  { color: #475569; }
+
+#app p { padding: 20px; color: #475569; }
+</style>
+</head>
+<body>
+<div id="app"><p>Cargando...</p></div>
+
+<script>
+const toMin = s => {
+    if (!s || s === '--:--') return 0;
+    const [h, m] = s.split(':').map(Number);
+    return h * 60 + m;
+};
+const toHHMM = m => {
+    const neg = m < 0; m = Math.abs(m);
+    return (neg ? '-' : '+') + Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0');
+};
+const fmt = m => Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0');
+
+function dayClass(d) {
+    if (!d.real || d.v === '--:--') return 'emp';
+    const min = toMin(d.v);
+    if (min >= 480) return 'ok';
+    if (min >= 420) return 'low';
+    return 'min';
+}
+
+async function load() {
+    const rows = await fetch('/fichajes').then(r => r.json());
+
+    let totalT = 0, totalP = 0;
+    rows.forEach(r => { totalT += r.trabajado_min; totalP += r.previsto_min; });
+    const totalDiff = totalT - totalP;
+
+    let html = '';
+
+    /* ── Resumen ── */
+    html += '<h2>Resumen mensual</h2>';
+    html += '<table class="summary"><thead><tr><th>Mes</th><th>Trabajado</th><th>Previsto</th><th>Diferencia</th></tr></thead><tbody>';
+
+    for (const r of rows) {
+        const noData = r.trabajado === '--:--';
+        const dc = r.diff_min > 0 ? 'pos' : r.diff_min < 0 ? 'neg' : '';
+        html += `<tr>
+            <td>${r.mes}</td>
+            <td class="${noData ? 'dim' : ''}">${noData ? '—' : r.trabajado}</td>
+            <td>${r.previsto}</td>
+            <td class="${noData ? 'dim' : dc}">${noData ? '—' : r.diff}</td>
+        </tr>`;
+    }
+
+    const tdc = totalDiff > 0 ? 'pos' : totalDiff < 0 ? 'neg' : '';
+    html += `<tr class="total"><td>TOTAL</td><td>${fmt(totalT)}</td><td>${fmt(totalP)}</td><td class="${tdc}">${toHHMM(totalDiff)}</td></tr>`;
+    html += '</tbody></table>';
+
+    /* ── Vista días ── */
+    html += '<h2>Vista completa</h2><div class="scroll"><table class="days"><thead><tr>';
+    html += '<th class="mes">Mes</th>';
+    for (let i = 1; i <= 31; i++) html += `<th>${i}</th>`;
+    html += '<th class="sep">Trab.</th><th>Prev.</th>';
+    html += '</tr></thead><tbody>';
+
+    for (const r of rows) {
+        html += `<tr><td class="mes">${r.mes}</td>`;
+        for (const d of r.dias) {
+            if (d === null) {
+                html += '<td class="wk"></td>';
+            } else {
+                const cls = dayClass(d);
+                html += `<td class="${cls}">${d.real ? d.v : ''}</td>`;
+            }
+        }
+        const noData = r.trabajado === '--:--';
+        const dc = r.diff_min > 0 ? 'pos' : r.diff_min < 0 ? 'neg' : '';
+        html += `<td class="ttot sep ${noData ? 'dim' : dc}">${noData ? '—' : r.trabajado}</td>`;
+        html += `<td class="ttot dim">${r.previsto}</td>`;
+        html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    document.getElementById('app').innerHTML = html;
+}
+
+load();
+</script>
+</body>
+</html>

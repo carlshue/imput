@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es" data-textdirection="ltr" class="loading">
+
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<title>Control de Jornada</title>
+	<link rel="apple-touch-icon" href="gestion/app-assets/images/ico/apple-icon-120.png">
+	<link rel="shortcut icon" type="image/x-icon" href="gestion/app-assets/images/ico/favicon.ico">
+	<link
+		href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i"
+		rel="stylesheet">
+	<!-- BEGIN VENDOR CSS-->
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/fonts/feather/style.min.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/fonts/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/fonts/flag-icon-css/css/flag-icon.min.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/vendors/css/extensions/pace.css">
+	<link rel="stylesheet" type="text/css"
+		href="gestion/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="gestion/app-assets/vendors/css/tables/extensions/responsive.dataTables.min.css">
+	<!-- END VENDOR CSS-->
+	<!-- BEGIN STACK CSS-->
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/bootstrap-extended.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/app.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/colors.css">
+	<!-- END STACK CSS-->
+	<!-- BEGIN Page Level CSS-->
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/core/menu/menu-types/vertical-menu.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/core/menu/menu-types/vertical-overlay-menu.css">
+	<!-- END Page Level CSS-->
+	<!-- BEGIN Custom CSS-->
+	<link rel="stylesheet" type="text/css" href="gestion/assets/css/style.css">
+	<!-- END Custom CSS-->
+
+	<!-- BEGIN Page Level CSS-->
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/plugins/forms/validation/form-validation.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/plugins/forms/switch.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/plugins/pickers/daterange/daterange.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/vendors/css/forms/selects/select2.min.css">
+	<!-- END Page Level CSS-->
+
+	<!-- BEGIN VENDOR CSS-->
+	<link rel="stylesheet" type="text/css"
+		href="gestion/app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/vendors/css/forms/icheck/icheck.css">
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/vendors/css/forms/toggle/switchery.min.css">
+
+	<link rel="stylesheet" type="text/css" href="gestion/app-assets/css/plugins/forms/extended/form-extended.css">
+	<!-- END VENDOR CSS-->
+
+</head>
+
+<body data-open="click" class="vertical-layout   fixed-navbar">
+
+	 <!-- navbar-fixed-top-->
+    <nav class="header-navbar navbar navbar-with-menu navbar-fixed-top navbar-light navbar-border">
+      <div class="navbar-wrapper">
+        <div class="navbar-header">
+          <ul class="nav navbar-nav">
+            <li></li>
+            <li class="nav-item"> <img alt="stack admin logo" style="height: 40px !important;" src="gestion/app-assets/images/logo/stack-logo.jpg" class="brand-logo">
+                <h2 class="brand-text" style="color:#3a51ab"> </h2></li>            
+            <li></li>
+          </ul>
+        </div>
+        <div class="navbar-container content container-fluid">
+          <div id="navbar-mobile" class="collapse navbar-toggleable-sm">
+            <ul class="nav navbar-nav">
+              <li></li>
+             <!--<li class="nav-item nav-search">
+			  <img src="imagenes/logo_header.png">
+               
+              </li>-->
+            </ul>
+            <ul class="nav navbar-nav float-xs-right">
+            
+              
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+	<!-- ////////////////////////////////////////////////////////////////////////////-->
+
+	<div class="app-content content container-fluid">
+		<div class="content-wrapper">
+			<div class="content-header row">
+				<div class="content-header-left col-md-10 col-xs-12 mb-1">
+					<h3 class="content-header-title">Listados</h3>
+				</div>
+				<div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-2 col-xs-12">
+					<div class="breadcrumb-wrapper col-xs-12">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">Listados Usuarios</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+			<div class="content-body">
+				<section id="basic-form-layouts">
+					<div class="row match-height">
+						<div class="col-md-12">
+							<div class="card">
+
+								<div class="card-body collapse in">
+									<div class="card-block">
+										<form class="form" enctype="multipart/form-data" method="post" action="listado_sumatorio.php">
+											<input type="hidden" name="id_usuario" value="46" />
+											<div class="form-body">
+												<h4 class="form-section"><i class="ft-align-justify"></i>Listado Usuarios</h4>
+												<div class="row">
+													<div class="col-xl-3 col-lg-3 col-md-3">
+														<div class="form-group">
+															<fieldset class="form-group validate">
+																<label>Nombre</label>
+																<select class="form-control" name="usuario" value="" required="" aria-invalid="false" readonly>
+																	<option value="">Selecciona un usuario....</option>
+																	<option value="46" selected>Carlos Andrés Vázquez Vicente</option>																</select>
+															</fieldset>
+														</div>
+													</div>
+													<div class="col-xl-2 col-lg-2 col-md-2">
+														<div class="form-group">
+															<label>Mes</label>
+															<select class="form-control" name="mes" id="mes" value="" aria-invalid="false">
+																<option value="">Selecciona un mes....</option>
+																<option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option><option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option><option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>															</select>
+														</div>
+													</div>
+													<div class="col-xl-2 col-lg-2 col-md-2">
+														<div class="form-group">
+															<label for="projectinput3">Fecha Inicio (dd/mm/aaaa)</label>
+															<input type="text" class="form-control date-inputmask" id="fecha_inicio" placeholder="Introduce fecha inicio" name="fecha_inicio" value="01/06/2026" />
+														</div>
+													</div>
+													<div class="col-xl-2 col-lg-2 col-md-2">
+														<div class="form-group">
+															<label for="projectinput3">Fecha Fin (dd/mm/aaaa)</label>
+															<input type="text" class="form-control date-inputmask" id="fecha_fin" placeholder="Introduce fecha final" name="fecha_fin" value="25/06/2026" />
+														</div>
+													</div>
+													<div class="col-xl-1 col-lg-1 col-md-1" style="margin-top: 28px">
+														<button type="submit" class="btn btn-info btn-min-width mr-1 mb-0" name="buscar_listado"><i class="fa fa-search"></i>&ensp;Buscar</button>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xl-3 col-lg-3 col-md-3">
+														<b>Horas Acumuladas:</b> 135:03													</div>
+												</div>
+												
+											</div>
+											<div class="card-body collapse in">
+												<div class="card-block card-dashboard">
+													<table id="tabla_listado_usuarios" class="table table-striped table-bordered dataex-html5-export text-inputs-searching">
+														<thead>
+															<tr>
+																<th width="30%">Usuario</th>
+																<th width="10%">Fecha</th>
+																<th width="10%">Entrada</th>
+																<th width="10%">Salida</th>
+																<th width="10%">Horas</th>
+																<th width="20%">Observaciones</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>01/06/2026</td>
+				<td>08:02:13</td>
+				<td>15:15:04</td>
+				<td>07:12</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>01/06/2026</td>
+				<td>15:45:26</td>
+				<td>17:40:33</td>
+				<td>01:55</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>02/06/2026</td>
+				<td>07:57:31</td>
+				<td>15:04:40</td>
+				<td>07:07</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>02/06/2026</td>
+				<td>15:35:19</td>
+				<td>17:34:27</td>
+				<td>01:59</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>03/06/2026</td>
+				<td>07:52:25</td>
+				<td>15:04:31</td>
+				<td>07:12</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>04/06/2026</td>
+				<td>07:57:42</td>
+				<td>15:02:12</td>
+				<td>07:04</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>05/06/2026</td>
+				<td>07:59:13</td>
+				<td>14:56:06</td>
+				<td>06:56</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>10/06/2026</td>
+				<td>08:05:18</td>
+				<td>15:23:39</td>
+				<td>07:18</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>10/06/2026</td>
+				<td>15:56:19</td>
+				<td>17:39:55</td>
+				<td>01:43</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>11/06/2026</td>
+				<td>07:49:06</td>
+				<td>14:59:20</td>
+				<td>07:10</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>12/06/2026</td>
+				<td>07:58:37</td>
+				<td>15:04:53</td>
+				<td>07:06</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>15/06/2026</td>
+				<td>07:35:37</td>
+				<td>15:36:01</td>
+				<td>08:00</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>16/06/2026</td>
+				<td>07:34:16</td>
+				<td>15:34:32</td>
+				<td>08:00</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>17/06/2026</td>
+				<td>07:33:52</td>
+				<td>15:30:43</td>
+				<td>07:56</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>18/06/2026</td>
+				<td>07:32:12</td>
+				<td>15:42:40</td>
+				<td>08:10</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>19/06/2026</td>
+				<td>07:26:18</td>
+				<td>15:20:30</td>
+				<td>07:54</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>22/06/2026</td>
+				<td>07:34:03</td>
+				<td>15:35:12</td>
+				<td>08:01</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>23/06/2026</td>
+				<td>07:33:19</td>
+				<td>15:33:50</td>
+				<td>08:00</td>
+				<td>  </td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>24/06/2026</td>
+				<td>07:29:54</td>
+				<td>16:00:48</td>
+				<td>08:30</td>
+				<td>  salida jubileo 16:00</td>
+			</tr><tr>
+				<td>Carlos Andrés Vázquez Vicente</td>
+				<td>25/06/2026</td>
+				<td>07:37:51</td>
+				<td>15:19:55</td>
+				<td>07:42</td>
+				<td>  </td>
+			</tr>														</tbody>
+														<tfoot style="display:none;">
+															<tr>
+																<th>Usuario</th>
+																<th>Fecha</th>
+																<th>Entrada</th>
+																<th>Salida</th>
+																<th>Horas</th>
+																<th>Observaciones</th>
+															</tr>
+														</tfoot>
+													</table>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+	<footer class="footer footer-static footer-light navbar-border">
+		<p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span
+				class="float-md-left d-xs-block d-md-inline-block">Desarrollado por <a
+					href="http://www.solucionatecnologia.com/" target="_blank" class="text-bold-800 grey darken-2">Soluciona
+					Tecnología </a> </span>
+	</footer>
+
+
+
+	<!-- BEGIN VENDOR JS-->
+	<script src="gestion/app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+	<!-- BEGIN VENDOR JS-->
+	<!-- BEGIN PAGE VENDOR JS-->
+	<script src="gestion/app-assets/vendors/js/tables/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/jszip.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/pdfmake.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/vfs_fonts.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/buttons.html5.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/buttons.print.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/tables/buttons.colVis.min.js" type="text/javascript"></script>
+	<!-- END PAGE VENDOR JS-->
+	<!-- BEGIN STACK JS-->
+	<script src="gestion/app-assets/js/core/app-menu.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/js/core/app.js" type="text/javascript"></script>
+	<!-- END STACK JS-->
+	<!-- BEGIN PAGE LEVEL JS-->
+	<script src="gestion/app-assets/js/scripts/tables/datatables-extensions/datatable-button/datatable-html5.js"
+		type="text/javascript"></script>
+	<!-- END PAGE LEVEL JS-->
+
+	<!-- BEGIN PAGE VENDOR JS-->
+	<script src="gestion/app-assets/vendors/js/pickers/dateTime/moment-with-locales.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/pickers/dateTime/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/pickers/pickadate/picker.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/pickers/pickadate/picker.date.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/pickers/pickadate/picker.time.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/pickers/pickadate/legacy.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/pickers/daterange/daterangepicker.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js"
+		type="text/javascript"></script>
+	<script src="gestion/app-assets/js/scripts/pickers/dateTime/picker-date-time.js" type="text/javascript"></script>
+	<script src="gestion/app-assets/js/scripts/forms/extended/form-inputmask.js" type="text/javascript"></script>
+
+	<!-- BEGIN PAGE LEVEL JS-->
+	<script src="gestion/app-assets/js/scripts/forms/validation/form-validation.js" type="text/javascript"></script>
+	<!-- END PAGE LEVEL JS-->
+
+	<script>
+		$(document).ready(function() {
+
+			$('#mes').on('change', function() {
+				var mes = $(this).val();
+
+				if (mes) {
+					var ano = new Date().getFullYear();
+					var mesStr = mes.toString().padStart(2, '0');
+					var primerDia = "01/" + mesStr + "/" + ano;
+					var ultimoDia = new Date(ano, parseInt(mes), 0).getDate();
+					var ultimoDiaStr = (ultimoDia < 10 ? "0" : "") + ultimoDia + "/" + mesStr + "/" + ano;
+
+					$('#fecha_inicio').val(primerDia).trigger('input');
+					$('#fecha_fin').val(ultimoDiaStr).trigger('input');
+					}
+				});
+			});
+
+		$(document).ready(function () {
+			$('#tabla_listado_usuarios').DataTable({
+				//bJQueryUI : true,
+				bDestroy: true,
+				order : [[1, 'desc'], [3, 'desc']],
+				//"ordering": false,
+
+				//Desabilitar buscador
+				//"searching":   false
+			});
+
+			$("#tabla_listado_usuarios_length").hide();
+			$("#tabla_listado_usuarios_filter").hide();
+		});
+
+	</script>
+</body>
+
+</html>
