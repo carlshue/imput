@@ -1,7 +1,9 @@
 import csv
+import io
 import os
 import calendar
 from datetime import date
+from crypto import encrypt_text
 
 MESES_ES = {1:"Enero",2:"Febrero",3:"Marzo",4:"Abril",5:"Mayo",6:"Junio",
             7:"Julio",8:"Agosto",9:"Sept.",10:"Oct.",11:"Nov.",12:"Dic."}
@@ -102,31 +104,34 @@ def run():
     ts       = "20260223_000000"
     filepath = os.path.join(base, "dat", f"fichajes_{ts}.csv")
 
-    with open(filepath, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["timestamp", "mes"] + [str(i) for i in range(1, 32)] + ["trabajado", "previsto"])
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(["timestamp", "mes"] + [str(i) for i in range(1, 32)] + ["trabajado", "previsto"])
 
-        for month in range(1, 13):
-            dias  = []
-            total = 0
-            days_in_month = calendar.monthrange(2026, month)[1]
+    for month in range(1, 13):
+        dias  = []
+        total = 0
+        days_in_month = calendar.monthrange(2026, month)[1]
 
-            for day in range(1, 32):
-                if day > days_in_month:
-                    dias.append("")
-                    continue
-                d = date(2026, month, day)
-                if d.weekday() >= 5:
-                    dias.append("")
-                elif d in mins_by_date:
-                    m = mins_by_date[d]
-                    total += m
-                    dias.append(fmt(m))
-                else:
-                    dias.append("--:--")
+        for day in range(1, 32):
+            if day > days_in_month:
+                dias.append("")
+                continue
+            d = date(2026, month, day)
+            if d.weekday() >= 5:
+                dias.append("")
+            elif d in mins_by_date:
+                m = mins_by_date[d]
+                total += m
+                dias.append(fmt(m))
+            else:
+                dias.append("--:--")
 
-            trabajado = fmt(total) if total else "--:--"
-            writer.writerow([ts, MESES_ES[month]] + dias + [trabajado, PREVISTO[month]])
+        trabajado = fmt(total) if total else "--:--"
+        writer.writerow([ts, MESES_ES[month]] + dias + [trabajado, PREVISTO[month]])
+
+    with open(filepath, "wb") as f:
+        f.write(encrypt_text(buf.getvalue()))
 
     print(f"OK -> {filepath}")
 

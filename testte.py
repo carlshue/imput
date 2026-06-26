@@ -3,12 +3,12 @@ import time
 import random
 import os
 import csv
+import io
 from datetime import datetime
 from bs4 import BeautifulSoup
+from crypto import encrypt_text
 
-# -----------------------------
-# CONFIG YA DESENCRIPTADO
-# -----------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 config = {
     "base_url": "ctconerp.com",
@@ -37,7 +37,7 @@ config = {
 # LOGIC
 # -----------------------------
 
-def logit(date: bool):
+def logit(salida: bool):
 
     base_url = config["base_url"]
     paths = config["paths"]
@@ -113,11 +113,10 @@ def logit(date: bool):
         "observaciones": ""
     }
 
-    if date: #  [ROJO]
-        payload_validar["salida"] = "salida" # /pang date = True      
-    
-    else: # [VERDE]
-        payload_validar["entrada"] = "entrada" # /ping date = False         
+    if salida:
+        payload_validar["salida"] = "salida"
+    else:
+        payload_validar["entrada"] = "entrada"
 
     print("[*] VALIDAR POST")
 
@@ -125,9 +124,6 @@ def logit(date: bool):
 
     print(r_validar.status_code)
     print(r_validar.text[:500])
-
-    with open("debug_validar.html", "w", encoding="utf-8") as f:
-        f.write(r_validar.text)
 
     time.sleep(random.uniform(2, 5))
     
@@ -140,8 +136,8 @@ def logit(date: bool):
     r4 = session.get(url(paths["listado"]), headers=headers)
     print(r4.status_code)
 
-    with open("ponsese.html", "w", encoding="utf-8") as f:
-        f.write(r4.text)
+    with open(os.path.join(BASE_DIR, "ponsese.html"), "wb") as f:
+        f.write(encrypt_text(r4.text))
 
     time.sleep(random.uniform(1, 3))
 
@@ -154,38 +150,42 @@ def logit(date: bool):
     r5 = session.get(url(paths["monthly"]), headers=headers)
     print(r5.status_code)
 
-    with open("monthly.html", "w", encoding="utf-8") as f:
-        f.write(r5.text)
+    with open(os.path.join(BASE_DIR, "monthly.html"), "wb") as f:
+        f.write(encrypt_text(r5.text))
 
     # -----------------------------
     # 8. BACKUP CSV
     # -----------------------------
 
     try:
-        os.makedirs("dat", exist_ok=True)
+        os.makedirs(os.path.join(BASE_DIR, "dat"), exist_ok=True)
 
         soup = BeautifulSoup(r5.text, "html.parser")
         table = soup.find("table", {"id": "tabla_fichajes_resumen"})
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filepath  = os.path.join("dat", f"fichajes_{timestamp}.csv")
+        epoch     = str(int(datetime.now().timestamp()))
+        filepath  = os.path.join(BASE_DIR, "dat", f"{epoch}.csv")
 
-        with open(filepath, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(["timestamp", "mes"] + [str(i) for i in range(1, 32)] + ["trabajado", "previsto"])
+        buf = io.StringIO()
+        writer = csv.writer(buf)
+        writer.writerow(["timestamp", "mes"] + [str(i) for i in range(1, 32)] + ["trabajado", "previsto"])
 
-            for tr in table.tbody.find_all("tr"):
-                cells = tr.find_all("td")
-                mes   = cells[0].get_text(strip=True)
-                dias  = []
-                for td in cells[1:32]:
-                    if "e6e6e6" in td.get("style", ""):
-                        dias.append("")
-                    else:
-                        dias.append(td.get_text(strip=True) or "--:--")
-                trabajado = cells[32].get_text(strip=True) if len(cells) > 32 else ""
-                previsto  = cells[33].get_text(strip=True) if len(cells) > 33 else ""
-                writer.writerow([timestamp, mes] + dias + [trabajado, previsto])
+        for tr in table.tbody.find_all("tr"):
+            cells = tr.find_all("td")
+            mes   = cells[0].get_text(strip=True)
+            dias  = []
+            for td in cells[1:32]:
+                if "e6e6e6" in td.get("style", ""):
+                    dias.append("")
+                else:
+                    dias.append(td.get_text(strip=True) or "--:--")
+            trabajado = cells[32].get_text(strip=True) if len(cells) > 32 else ""
+            previsto  = cells[33].get_text(strip=True) if len(cells) > 33 else ""
+            writer.writerow([timestamp, mes] + dias + [trabajado, previsto])
+
+        with open(filepath, "wb") as f:
+            f.write(encrypt_text(buf.getvalue()))
 
         print(f"[*] CSV guardado: {filepath}")
 
