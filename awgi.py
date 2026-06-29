@@ -200,7 +200,23 @@ def get_stats():
 
         esp_min  = dias * 8 * 60
         trab_min = sum(r["trabajado_min"] for r in _parse_fichajes())
-        diff     = trab_min - esp_min
+
+        ajustes_min = 0
+        ajustes = []
+        try:
+            import json
+            aj_path = _path("dat/ajustes.json")
+            if os.path.exists(aj_path):
+                aj = json.loads(open(aj_path).read())
+                for fecha_str, mins in aj.items():
+                    ajustes_min += mins
+                    ajustes.append({"fecha": fecha_str, "min": mins,
+                                    "fmt": f"+{mins//60}:{mins%60:02d}"})
+        except Exception:
+            pass
+
+        trab_min += ajustes_min
+        diff      = trab_min - esp_min
 
         def fmt(m):
             neg = m < 0
@@ -217,6 +233,7 @@ def get_stats():
             "horas_trabajadas_min": trab_min,
             "diff":                 fmt(diff),
             "diff_min":             diff,
+            "ajustes":              ajustes,
         }
     except Exception as e:
         return {"error": str(e)}
