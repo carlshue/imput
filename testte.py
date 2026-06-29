@@ -62,17 +62,22 @@ def _login():
     return s
 
 
-def _guardar_datos(session):
-    """Pasos 6-8: descarga listado + resumen mensual + guarda CSV."""
+def _guardar_ponsese(session):
+    """Descarga solo el listado de fichajes del día → ponsese.html."""
     h = config["headers"]
-
     print("[*] LISTADO")
-    r4 = session.get(_url(config["paths"]["listado"]), headers=h)
-    print(r4.status_code)
+    r = session.get(_url(config["paths"]["listado"]), headers=h)
+    print(r.status_code)
     with open(os.path.join(BASE_DIR, "ponsese.html"), "wb") as f:
-        f.write(encrypt_text(r4.text))
+        f.write(encrypt_text(r.text))
+
+
+def _guardar_datos(session):
+    """Descarga listado + resumen mensual + guarda CSV snapshot."""
+    _guardar_ponsese(session)
     time.sleep(random.uniform(1, 3))
 
+    h = config["headers"]
     print("[*] RESUMEN MENSUAL")
     r5 = session.get(_url(config["paths"]["monthly"]), headers=h)
     print(r5.status_code)
@@ -125,9 +130,9 @@ def logit(salida: bool):
     r = s.post(_url(config["paths"]["validar"]), data=payload, headers=h)
     print(r.status_code)
     print(r.text[:500])
-    time.sleep(random.uniform(2, 5))
+    time.sleep(random.uniform(2, 4))
 
-    _guardar_datos(s)
+    _guardar_ponsese(s)
     return "OK"
 
 
