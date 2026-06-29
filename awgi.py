@@ -190,10 +190,12 @@ def get_stats():
         hasta  = date.today()
 
         dias = 0
+        ultimo_laboral = inicio
         d = inicio
         while d < hasta:
             if d.weekday() < 5 and d not in NON_WORKING:
                 dias += 1
+                ultimo_laboral = d
             d += timedelta(days=1)
 
         esp_min  = dias * 8 * 60
@@ -207,7 +209,7 @@ def get_stats():
 
         return {
             "inicio":               str(inicio),
-            "hasta":                str(hasta - timedelta(days=1)),
+            "hasta":                str(ultimo_laboral),
             "dias_laborables":      dias,
             "horas_esperadas":      f"{esp_min//60}:{esp_min%60:02d}",
             "horas_esperadas_min":  esp_min,
