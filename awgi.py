@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from bs4 import BeautifulSoup
 
-from testte import logit
+from testte import logit, refresh
 from crypto import encrypt_b64, decrypt_text
 
 app = FastAPI()
@@ -263,6 +263,16 @@ def get_historial():
                                     "mes": mes, "dia": day,
                                     "antes": val_a, "despues": "--:--"})
         return changes
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/refresh")
+def do_refresh(key: str = ""):
+    if key != KEY:
+        return {"error": "unauthorized"}
+    try:
+        return {"message": "refreshed", "result": refresh()}
     except Exception as e:
         return {"error": str(e)}
 
