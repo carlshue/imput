@@ -267,6 +267,14 @@ def get_historial():
         return {"error": str(e)}
 
 
+@app.get("/last-update")
+def last_update():
+    try:
+        return {"ts": os.path.getmtime(_path("monthly.html"))}
+    except Exception:
+        return {"ts": None}
+
+
 @app.get("/refresh")
 def do_refresh(key: str = ""):
     if key != KEY:
